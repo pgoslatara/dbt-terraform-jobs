@@ -1,0 +1,12 @@
+__pycache__/
+.venv/
+.vscode/
+dbt_packages/
+logs/
+target/
+terraform/.terraform
+terraform/.terraform.lock.hcl
+.env
+.user.yml
+*/ipynb
+*.json

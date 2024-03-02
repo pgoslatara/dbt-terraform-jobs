@@ -1,0 +1,91 @@
+name: daily_runs
+
+on:
+  schedule:
+    - cron: "0 4 * * *"
+  workflow_dispatch:
+    inputs:
+      env_to_run:
+        description: The environment in which to run the job
+        default: 'stg'
+        options:
+          - prd
+          - stg
+        required: true
+        type: choice
+
+env:
+  DBT_PROFILES_DIR: "."
+
+jobs:
+  daily_run_stg:
+    if: contains(fromJSON('["stg", ""]'), github.event.inputs.env_to_run)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: stg
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Save stg GCP credentials to runner
+        run: |
+          echo "${{ secrets.DBT_CICD_SA_SECRET_KEY_STG_BASE64_ENCODED }}" | base64 --decode >> ./service_account.json && \
+          export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/service_account.json"
+
+      - name: Authenticate with GCP
+        run: |
+          gcloud auth activate-service-account dbt-cicd@beyond-basics-stg.iam.gserviceaccount.com --key-file=./service_account.json && \
+          gcloud config set project beyond-basics-stg
+
+      - name: Install python packages
+        run: pip install -r requirements.txt
+
+      - name: dbt seed
+        run: dbt seed --target stg
+        env:
+          DBT_DATASET: "stg"
+
+      - name: dbt build
+        run: dbt build --target stg
+        env:
+          DBT_DATASET: "stg"
+
+  daily_run_prd:
+    if: contains(fromJSON('["prd", ""]'), github.event.inputs.env_to_run)
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: prd
+
+      - uses: actions/setup-python@v4
+        with:
+          python-version: "3.11"
+
+      - name: Save prd GCP credentials to runner
+        run: |
+          echo "${{ secrets.DBT_CICD_SA_SECRET_KEY_PRD_BASE64_ENCODED }}" | base64 --decode >> ./service_account.json && \
+          export GOOGLE_APPLICATION_CREDENTIALS="$(pwd)/service_account.json"
+
+      - name: Authenticate with GCP
+        run: |
+          gcloud auth activate-service-account dbt-cicd@beyond-basics-prd.iam.gserviceaccount.com --key-file=./service_account.json && \
+          gcloud config set project beyond-basics-prd
+
+      - name: Install python packages
+        run: pip install -r requirements.txt
+
+      - name: dbt seed
+        run: dbt seed --target prd
+        env:
+          DBT_DATASET: "prd"
+
+      - name: dbt build
+        run: dbt build --target prd
+        env:
+          DBT_DATASET: "prd"

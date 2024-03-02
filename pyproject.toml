@@ -1,0 +1,18 @@
+[tool.poetry]
+authors = ["Padraic Slattery <pgoslatara@gmail.com>"]
+description = "Terraform a dbt Cloud project"
+license ="MIT"
+name = "dbt-terraform-jobs"
+packages = []
+version = "0.0.0"
+
+[tool.poetry.dependencies]
+python = ">=3.11,<3.12"
+dbt-bigquery = "1.7.6"
+
+[tool.poetry.dev-dependencies]
+pre-commit = "^3"
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"

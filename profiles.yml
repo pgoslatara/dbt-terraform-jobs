@@ -1,0 +1,11 @@
+dbt_terraform_jobs:
+  target: dev
+  outputs:
+    dev:
+      type: bigquery
+      dataset: "{{ env_var('DBT_DATASET') }}"
+      job_retries: 3
+      location: US
+      method: oauth
+      project: "padraic-slattery-sndbx-o"
+      threads: 8
