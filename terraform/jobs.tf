@@ -42,4 +42,5 @@ resource "dbtcloud_job" "daily_job" {
     "schedule" : true
   }
   schedule_cron = "0 2 * * *"
+  schedule_type = "custom_cron"
 }

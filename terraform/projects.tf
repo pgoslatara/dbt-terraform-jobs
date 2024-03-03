@@ -11,3 +11,9 @@ resource "dbtcloud_project_repository" "dbt_project_repository" {
   project_id    = dbtcloud_project.padraic_terraform_project.id
   repository_id = dbtcloud_repository.dbt_terraform_jobs.repository_id
 }
+
+resource "dbtcloud_bigquery_credential" "my_credential" {
+  project_id  = dbtcloud_project.padraic_terraform_project.id
+  dataset     = "my_bq_dataset"
+  num_threads = 16
+}

@@ -1,6 +1,6 @@
 resource "dbtcloud_bigquery_connection" "bq_connection" {
   project_id                  = dbtcloud_project.padraic_terraform_project.id
-  name                        = "bq_connection"
+  name                        = "padraic_sandbox_connection"
   type                        = "bigquery"
   is_active                   = true
   gcp_project_id              = "padraic-slattery-sndbx-o"

@@ -1,17 +1,18 @@
-# data "http" "github_installations_response" {
-#   url = format("%s/v2/integrations/github/installations/", var.dbt_host_url)
-#   request_headers = {
-#     Authorization = format("Bearer %s", var.dbt_token)
-#   }
-# }
-
-# locals {
-#   github_installation_id = jsondecode(data.http.github_installations_response.response_body)[0].id
-# }
-
 resource "dbtcloud_repository" "dbt_terraform_jobs" {
   project_id             = dbtcloud_project.padraic_terraform_project.id
-  remote_url             = "git@github.com:pgoslatara/dbt-terraform-jobs.git"
+  remote_url             = "git@github.com:pgoslatara/dbt-terraform-jobs.git" # WHen TF creates dbt Cloud project, copy deploy key to GitHub repo manually
   # github_installation_id = local.github_installation_id
-  git_clone_strategy     = "github_app"
+  git_clone_strategy     = "deploy_key" # "github_app"
+}
+
+# terraform import github_repository.dbt_terraform_jobs dbt-terraform-jobs
+resource "github_repository" "dbt_terraform_jobs" {
+  name        = "dbt-terraform-jobs"
+}
+
+resource "github_repository_deploy_key" "deploy_key" {
+  title      = "Repository test key"
+  repository = github_repository.dbt_terraform_jobs.name
+  key        = dbtcloud_repository.dbt_terraform_jobs.deploy_key
+  read_only  = true
 }

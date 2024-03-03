@@ -7,14 +7,15 @@ resource "dbtcloud_environment" "ci_environment" {
 
 resource "dbtcloud_environment" "dev_environment" {
   dbt_version   = var.dbt_version
-  name          = "CI"
+  name          = "dev"
   project_id    = dbtcloud_project.padraic_terraform_project.id
   type          = "development"
 }
 
 resource "dbtcloud_environment" "prod_environment" {
   dbt_version   = var.dbt_version
-  name          = "production"
+  deployment_type = "production"
+  name          = "prod"
   project_id    = dbtcloud_project.padraic_terraform_project.id
-  type          = "development"
+  type          = "deployment"
 }
