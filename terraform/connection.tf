@@ -1,5 +1,5 @@
 resource "dbtcloud_bigquery_connection" "bq_connection" {
-  project_id                  = dbtcloud_project.padraic_terraform_project.id
+  project_id                  = dbtcloud_project.padraic_dbt_terraform_jobs.id
   name                        = "padraic_sandbox_connection"
   type                        = "bigquery"
   is_active                   = true
