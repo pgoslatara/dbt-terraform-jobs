@@ -6,14 +6,14 @@ locals {
 }
 
 resource "dbtcloud_job" "scheduled_jobs_from_yml" {
-  for_each = { for f in yamldecode(file("../dbt_jobs.yml"))["jobs"] : f["name"] => f }
+  for_each = { for j in yamldecode(file("../dbt_jobs.yml"))["jobs"] : j["name"] => j }
 
   dbt_version          = var.dbt_version
   description          = try(each.value.description, "")
   environment_id       = local.dbt_cloud_environments[each.value.environment].environment_id
   execute_steps        = each.value.commands
   generate_docs        = true
-  is_active            = try(each.value.is_active, true)
+  is_active            = true
   name                 = each.value.name
   num_threads          = try(each.value.threads, 8)
   project_id           = dbtcloud_project.padraic_dbt_terraform_jobs.id
