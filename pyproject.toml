@@ -1,6 +1,6 @@
 [tool.poetry]
 authors = ["Padraic Slattery <pgoslatara@gmail.com>"]
-description = "Terraform a dbt Cloud project"
+description = "Terraform a dbt Cloud project's jobs"
 license ="MIT"
 name = "dbt-terraform-jobs"
 packages = []

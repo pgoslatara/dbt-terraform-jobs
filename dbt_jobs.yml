@@ -1,0 +1,22 @@
+jobs:
+
+  - name: Daily staging job
+    commands:
+      - dbt run --select tag:staging
+    cron: 0 3 * * *
+    description: Update all staging models
+    environment: prod
+
+  - name: Update dbt
+    commands:
+      - dbt run
+      - dbt test
+    cron: 0 3 * * *
+    environment: dev
+    is_active: false
+
+  - name: Build Marketing models
+    commands:
+      - dbt build --select tag:marketing
+    cron: 0 2 * * *
+    environment: prod

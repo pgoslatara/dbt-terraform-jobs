@@ -10,5 +10,5 @@ terraform/terraform.tfstate
 terraform/terraform.tfstate.backup
 .env
 .user.yml
-*/ipynb
+*.ipynb
 *.json
