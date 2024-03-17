@@ -18,7 +18,7 @@ resource "dbtcloud_job" "scheduled_jobs_from_yml" {
   num_threads          = try(each.value.threads, 8)
   project_id           = dbtcloud_project.padraic_dbt_terraform_jobs.id
   run_generate_sources = true
-  target_name          = "prod"
+  target_name          = local.dbt_cloud_environments[each.value.environment].name
   triggers = {
     "custom_branch_only" : false,
     "github_webhook" : false,
